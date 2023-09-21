@@ -1,5 +1,7 @@
 # env
 **/.env
+00-standalone/.env
+01-cluster-local-zk/.env
 
 # # certs
 # **/*.pem
