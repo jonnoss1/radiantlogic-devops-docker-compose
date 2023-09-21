@@ -9,6 +9,7 @@ services:
       ZK_CLUSTER: "${CLUSTER_NAME}"
       ZK_PASSWORD: "${ZK_PASSWORD}"
       LICENSE: "${LICENSE}"
+      INSTALL_SAMPLES: "${INSTALL_SAMPLES}"
     ports:
       - "7070:7070"
       - "7171:7171"

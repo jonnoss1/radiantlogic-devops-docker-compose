@@ -7,6 +7,8 @@ services:
       CLUSTER: "new" # new is default when not specified
       ZK_CLUSTER: "${CLUSTER_NAME}"
       LICENSE: "${LICENSE}"
+      INSTALL_SAMPLES: "${INSTALL_SAMPLES}"
+      # FID_PASSWORD: "${FID_PASSWORD}"
     ports:
       - "7070:7070"
       - "7171:7171"

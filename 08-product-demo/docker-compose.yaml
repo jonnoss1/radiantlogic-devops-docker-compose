@@ -1,0 +1,75 @@
+version: "3.3"
+services:
+  fid-0:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-0"
+    environment:
+      CLUSTER: "new" # new is default when not specified
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      LICENSE: "${LICENSE}"
+      INSTALL_SAMPLES: "${INSTALL_SAMPLES}"
+      # FID_PASSWORD: "${FID_PASSWORD}"
+    ports:
+      - "7070:7070"
+      - "7171:7171"
+      - "2389:2389"
+      - "2636:2636"
+      - "8089:8089"
+      - "8090:8090"
+    volumes:
+      - fid-0:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - fid-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-0:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  openldap-companya:
+    image: docker.io/bitnami/openldap:2.6
+    hostname: "radiant1"
+    ports:
+      - '3389:1389'
+      - '3636:1636'
+    environment:
+      - LDAP_ROOT=dc=Radiant1,dc=com
+      - LDAP_LOGLEVEL=-1
+      - LDAP_ADMIN_USERNAME=ldapadmin
+      - LDAP_ADMIN_PASSWORD=2Federate
+      - LDAP_USERS=user01,user02
+      - LDAP_PASSWORDS=password1,password2
+    volumes:
+      - 'openldap_companya_data:/bitnami/openldap'
+    networks:
+      fid-net:
+        aliases:
+          - fid-0
+  openldap-company2:
+    image: docker.io/bitnami/openldap:2.6
+    hostname: "radiant2"
+    ports:
+      - '4389:1389'
+      - '4636:1636'
+    environment:
+      - LDAP_ROOT=dc=Radiant2,dc=com
+      - LDAP_LOGLEVEL=-1
+      - LDAP_ADMIN_USERNAME=ldapadmin
+      - LDAP_ADMIN_PASSWORD=2Federate
+      - LDAP_USERS=user01,user02
+      - LDAP_PASSWORDS=password1,password2
+    volumes:
+      - 'openldap_company2_data:/bitnami/openldap'
+    networks:
+      fid-net:
+        aliases:
+          - fid-0 
+networks:
+  fid-net:
+volumes:
+  fid-0:
+  openldap_companya_data:
+    driver: local
+  openldap_company2_data:
+    driver: local
